@@ -1,6 +1,9 @@
 package com.example.dominik.jenkinstest;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 
 import static org.junit.Assert.*;
 
@@ -9,9 +12,14 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
+
+@Config(minSdk = 20, maxSdk = 25)
+@RunWith(RobolectricTestRunner.class)
 public class ExampleUnitTest {
+
     @Test
     public void addition_isCorrect() throws Exception {
-        assertEquals(4, 2 + 2);
+        assertEquals(6, 4 + 2);
     }
+
 }
