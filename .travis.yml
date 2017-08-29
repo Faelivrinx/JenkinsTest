@@ -34,26 +34,36 @@ android:
  - android-sdk-license-.+
  - google-gdk-license-.+
 
+addons:
+  apt_packages:
+    - pandoc
+  artifacts:
+    paths:
+    - $(git ls-files -o | grep build/outputs | tr "\n" ":")
+
 before_install:
+- pip install --user codecov
 - chmod +x gradlew
 - ./gradlew dependencies || true
 
 after_failure:
-- wget http://imgur.com/tools/imgurbash.sh
-- chmod a+x imgurbash.sh
-- adb shell screencap -p | sed 's/\r$//' &gt; screen.png
-- ./imgurbash.sh screen.png
 - pandoc builder/build/reports/tests/index.html -t plain | sed -n '/^Failed tests/,/default-package/p'
 
 after_success:
-- bash <(curl -s https://codecov.io/bash)
 - ./gradlew jacocoFullReport
-- pip install --user codecov
 - codecov
 
 script:
-- ./gradlew build jacocoTestReport assembleAndroidTest
-- "./gradlew clean build connectedCheck -PdisablePreDex --stacktrace"
+- ./gradlew check -PdisablePreDex --continue --stacktrace
+- android-wait-for-emulator
+- adb devices
+- adb shell input keyevent 82 &
+- ./gradlew connectedAndroidTest -PdisablePreDex --continue --stacktrace
+- rm /home/travis/.gradle/caches/2.8/plugin-resolution/cache.properties.lock
+
+after_script:
+- for f in app/build/outputs/lint-results.html; do pandoc $f -t plain; done
+- for f in data/build/outputs/lint-results.html; do pandoc $f -t plain; done
 
 # Tutorial here: https://medium.com/@harmittaa/travis-ci-android-example-357f6e632fc4
 
