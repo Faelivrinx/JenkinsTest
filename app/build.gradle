@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
+apply plugin: 'jacoco-android'
 
 android {
     compileSdkVersion 25
@@ -11,6 +12,13 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    testOptions {
+        unitTests.all {
+            jacoco {
+                includeNoLocationClasses = true
+            }
+        }
     }
     buildTypes {
         debug {
@@ -25,10 +33,7 @@ android {
             testCoverageEnabled false
         }
     }
-    productFlavors {
-        unitTest
 
-    }
     lintOptions {
         // I prefer avoiding a build fail if there is any warning, for they are only warnings
         abortOnError false
@@ -45,6 +50,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.0-alpha7'
     testCompile 'junit:junit:4.12'
     testCompile "org.robolectric:robolectric:3.4.2"
+    testCompile 'com.google.truth:truth:0.32'
 }
 
 jacoco {
@@ -55,31 +61,4 @@ jacoco {
 
 // Edit covered scope if needed
 // For my part I like having the coverage of both application and tests
-def coverageSourceDirs = [
-        '../app/src'
-]
 
-task jacocoTestReport(type: JacocoReport, dependsOn: "test") {
-    group = "Reporting"
-
-    description = "Generate Jacoco coverage reports"
-
-    classDirectories = fileTree(
-            dir: '../app/build/intermediates/classes',
-            excludes: ['**/R.class',
-                       '**/R$*.class',
-                       '**/*$ViewInjector*.*',
-                       '**/BuildConfig.*',
-                       '**/Manifest*.*']
-    )
-
-    additionalSourceDirs = files(coverageSourceDirs)
-    sourceDirectories = files(coverageSourceDirs)
-    executionData = files('../app/build/jacoco/testUnitTestDebug.exec')
-
-    reports {
-        xml.enabled = true
-        html.enabled = true
-    }
-
-}
