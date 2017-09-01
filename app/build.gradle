@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'jacoco'
-apply plugin: 'jacoco-android'
 
 android {
     compileSdkVersion 25
@@ -60,3 +59,26 @@ jacoco {
 // Edit covered scope if needed
 // For my part I like having the coverage of both application and tests
 
+def coverageSourceDirs = [
+        '../app/src'
+]
+
+task jacocoTestReport(type: JacocoReport, dependsOn: "test") {
+    executionData fileTree(project.rootDir.absolutePath).include("**/build/jacoco/*.exec")
+
+    subprojects.each {
+        sourceSets it.sourceSets.main
+    }
+
+    additionalSourceDirs = files(coverageSourceDirs)
+    sourceDirectories = files(coverageSourceDirs)
+
+    reports {
+        xml.enabled true
+        xml.destination "${buildDir}/reports/jacoco/report.xml"
+        html.enabled false
+        csv.enabled false
+    }
+
+
+}
