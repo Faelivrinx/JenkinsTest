@@ -51,3 +51,6 @@ script:
 branches:
   only:
   - master
+
+notifications:
+  slack: evfinders:2Hp0RCxekfwZfdUkE2hdSW1A
