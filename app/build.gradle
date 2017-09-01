@@ -81,7 +81,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: "test") {
 
     additionalSourceDirs = files(coverageSourceDirs)
     sourceDirectories = files(coverageSourceDirs)
-    executionData = files('../app/build/jacoco/testUnitTestDebug.exec')
+    executionData = files('../reports/jacoco/testUnitTestDebug.exec')
 
     reports {
         xml.enabled = true
