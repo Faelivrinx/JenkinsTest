@@ -27,9 +27,4 @@ public class ExampleUnitTest {
         assertEquals(5, 3 + 2);
     }
 
-    @Test
-    public void addition_isCorrecte() throws Exception {
-        assertEquals(6, 3 + 3);
-    }
-
 }
