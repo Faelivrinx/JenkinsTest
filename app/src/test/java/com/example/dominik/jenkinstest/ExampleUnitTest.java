@@ -22,9 +22,4 @@ public class ExampleUnitTest {
         assertEquals(4, 2 + 2);
     }
 
-    @Test
-    public void failed_isFailes() {
-        assertEquals(2, 4 + 2);
-    }
-
 }
