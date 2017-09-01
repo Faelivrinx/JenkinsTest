@@ -54,3 +54,5 @@ branches:
 
 notifications:
   slack: evfinders:2Hp0RCxekfwZfdUkE2hdSW1A
+  template:
+  - "Build <%{build_url}|#%{build_number}> (<%{compare_url}|%{commit}>) of %{repository}@%{branch} by %{author} %{result} in %{duration}"
